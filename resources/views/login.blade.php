@@ -34,11 +34,11 @@
                     <div class="text-center d-grid">
                         <button type="submit" class="btn btn-primary btn-lg btn-block">Login</button>
                     </div>
-
-                    <div class="text py-3">
-                        <a href="">Forgot Password?</a>
-                    </div>
                 </form>
+
+                <div class="text py-3">
+                    <a href="">Forgot Password?</a>
+                </div>
 
 
           </div>

@@ -60,13 +60,15 @@
               </tr>
             </thead>
             <tbody>
-
+                @foreach ($chapter as $c)
                 <tr>
-                <th scope="row">1</th>
-                <td>Chapter 1: the introductio</td>
-                <td>24/02/2024</td>
-                <td><button class="btn btn-light" type="button" data-bs-toggle="modal" data-bs-target="#exampleModal1">Read</button></td>
-              </tr>
+                    <th scope="row">{{ $c->id }}</th>
+                    <td>{{ $c->chapter_name }}</td>
+                    <td>{{$c->created_at }}</td>
+                    <td><button class="btn btn-light" type="button" data-bs-toggle="modal" data-bs-target="#chapter{{ $c->id }}" >Read</button></td>
+                  </tr>
+                @endforeach
+
 
             </tbody>
           </table>
@@ -74,23 +76,25 @@
 
 </div>
 
-<div class="modal fade" id="exampleModal1" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+    @foreach ($chapter as $c)
+    <div class="modal fade" id="chapter{{ $c->id }}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg"> <!-- Added modal-lg class for large modal -->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">{{ $c->chapter_name }}</h1>
+                </div>
+                <div class="modal-body text-center"> <!-- Added text-center class -->
+                    <img src="{{ asset('chapters/'. $c->chapter_image) }}" class="img-fluid" alt=""> <!-- Added img-fluid class for responsive image -->
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary">Save changes</button>
+                </div>
+            </div>
         </div>
-        <div class="modal-body">
-          ...
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-primary">Save changes</button>
-        </div>
-      </div>
     </div>
-  </div>
+    @endforeach
+
 
 @endsection
 

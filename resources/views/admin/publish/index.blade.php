@@ -48,8 +48,18 @@
                     <td>{{ $c->chapter_name }}</td>
                     <td>{{ $c->created_at }}</td>
                     {{-- <td><button class="btn btn-light" type="button" data-bs-toggle="modal" data-bs-target="#exampleModal1">Read</button></td> --}}
+
                     <td><a class="btn btn-dark" href="{{ route('publish.view', [$c->id]) }}">view</button></td>
+                        <td>
+                            <form action="{{ route('publish.destroy', $c->id) }}" method="POST" onsubmit="return confirmDelete();">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="btn btn-sm btn-light"><i class="bi bi-trash"></i></button>
+                                <a href="{{ route('publish.edit', $c->id) }}" class="btn btn-sm btn-light"><i class="bi bi-pencil-square"></i></a>
+                            </form>
+                        </td>
                     <td>
+
                         {{-- <a href="" class="btn btn-sm btn-light" class="btn btn-sm btn-light" onclick="return confirmDelete();"><i class="bi bi-trash"></i></a>
                         <a href="{{route('publish.edit')}}" class="btn btn-sm btn-light"><i class="bi bi-pencil-square "></i></a> --}}
                     </td>

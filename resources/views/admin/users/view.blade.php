@@ -29,12 +29,12 @@
         </div>
         <div class="mb-3">
             <label for="first_name" class="form-label">Full Name</label>
-            <input type="text" class="form-control" id="first_name" name="first_name" value="" disabled>
+            <input type="text" class="form-control" id="first_name" name="first_name" value="{{ $u->name }}" disabled>
             <span class="text-danger w-100"></span>
         </div>
         <div class="mb-3">
             <label for="email" class="form-label">Email</label>
-            <input type="text" class="form-control" id="email" name="email" value="" disabled>
+            <input type="text" class="form-control" id="email" name="email" value="{{ $u->email }}" disabled>
             <span class="text-danger w-100"></span>
         </div>
         <button class="btn btn-dark" type="submit">Save</button>

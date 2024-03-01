@@ -38,6 +38,7 @@
                 <th scope="col">#</th>
                 <th scope="col">Name</th>
                 <th scope="col">Email</th>
+                <th></th>
                 <th scope="col">Actions</th>
             </tr>
             </thead>
@@ -48,10 +49,22 @@
                 <th scope="row"><p>{{ $user->id }}</p></th>
                 <td><p>{{ $user->name }}</p></td>
                 <td><p>{{ $user->email }}</p></td>
-                <td>
-                    <a href="{{ route('users.view') }}" class="btn btn-sm btn-light"><i class="bi bi-eye"></i></a>
+                {{-- <td>
+                    <a href="{{ route('users.view',[$user->id]) }}" class="btn btn-sm btn-light"><i class="bi bi-eye"></i></a>
                     <a href="{{ route('users.edit') }}" class="btn btn-sm btn-light"><i class="bi bi-pencil-square"></i></a>
-                </td>
+                </td> --}}
+
+                <td><a class="btn btn-dark" href="{{ route('users.view', [$user->id]) }}">view</button></td>
+                    <td>
+                        <form action="{{ route('users.destroy', $user->id) }}" method="POST" onsubmit="return confirmDelete();">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" class="btn btn-sm btn-light"><i class="bi bi-trash"></i></button>
+                            <a href="{{ route('users.edit', $user->id) }}" class="btn btn-sm btn-light"><i class="bi bi-pencil-square"></i></a>
+                        </form>
+                    </td>
+                <td>
+
             </tr>
             @endforeach
 
@@ -59,5 +72,15 @@
             </tbody>
         </table>
     </div>
+
+@endsection
+
+@section('script')
+{{-- This repeats the animation from Intro --}}
+<script>
+function confirmDelete() {
+        return confirm("Are you sure you want to delete this item?");
+    }
+</script>
 
 @endsection

@@ -13,11 +13,6 @@
         <div class="col-lg-5 text-end">
             <div class="container-fluid">
                 <div class="row">
-                    <form class="d-flex col-9" role="search" method="GET" action="">
-                        <input class="form-control me-2" name="search" type="search" placeholder="Search" aria-label="Search" value="">
-                        <button class="btn btn-outline-success" type="submit">Search</button>
-                    </form>
-
                     {{-- <a href="{{ route('users.create') }}" class="col-3 btn btn-dark" type="submit">Add User</a> --}}
                 </div>
             </div>
@@ -41,16 +36,17 @@
         </thead>
         <tbody>
 
-        <tr>
-            <th scope="row"><p>1</p></th>
-            <td><p>Leo R. Paragatos</p></td>
-            <td><p>paragatosleo@gmail.com</p></td>
-            <td><p>04:31 PM, 28/02/24</p></td>
-            {{-- <td>
-                <a href="{{ route('users.view') }}" class="btn btn-sm btn-light"><i class="bi bi-eye"></i></a>
-                <a href="{{ route('users.edit') }}" class="btn btn-sm btn-light"><i class="bi bi-pencil-square"></i></a>
-            </td> --}}
-        </tr>
+        @foreach ($userLogs as $log)
+        @php $exists = \App\Models\User::find($log->user_id); @endphp
+            @if($exists != null)
+            <tr>
+                <td>{{ $log->user->id }}</td>
+                <td>{{ $log->user->name }}</td>
+                <td>{{ $log->action }}</td>
+                <td>{{ $log->created_at->format('Y-m-d H:i:s') }}</td>
+            </tr>
+            @endif
+        @endforeach
 
         </tbody>
     </table>

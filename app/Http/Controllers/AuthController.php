@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use App\Models\User;
+use App\Models\UserLog;
 
 
 class AuthController extends Controller
@@ -12,12 +14,14 @@ class AuthController extends Controller
    //Show Login Page
    public function login()
    {
-       if (!Auth::check())
+       if (!Auth::check()){
            return view('login');
-       elseif(Auth::check())
-           return redirect()->route('dashboard');
-       else
-           return redirect()->back();
+       }elseif(Auth::check()){
+        return redirect()->route('dashboard');
+       }else{
+        return redirect()->back();
+       }
+
    }
 
 
@@ -41,6 +45,11 @@ class AuthController extends Controller
 
        if (Auth::attempt($credentials, $request->remember)) {
            $request->session()->regenerate();
+           UserLog::create([
+            'user_id' => Auth::user()->id,
+            'action' => 'Logged In User ' . Auth::user()->name
+        ]);
+
            return redirect()->route('dashboard');
        }
 
@@ -57,4 +66,6 @@ class AuthController extends Controller
        $request->session()->regenerateToken();
        return redirect()->route('login')->with('flash_success', 'Logged out!');;
    }
+
+
 }

@@ -4,9 +4,13 @@ namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\Auth;
 use App\Models\Chapters;
+use App\Models\User;
+use App\Models\UserLog;
 use Illuminate\Http\Request;
 use Log;
 use DB;
+
+// php artisan make:controller PublichController
 
 class PublishController extends Controller
 {
@@ -68,6 +72,11 @@ class PublishController extends Controller
                 'chapter_image' => $file
             ]);
 
+            UserLog::create([
+                'user_id' => Auth::user()->id,
+                'action' => 'Published Chapter ' . $validated['chapter_name']
+            ]);
+
             DB::commit();
         }catch(\Exception $e){
             Log::error($e);
@@ -126,6 +135,25 @@ class PublishController extends Controller
      */
     public function destroy($id)
     {
-        //
+        try {
+            DB::beginTransaction();
+            $chapter = Chapters::findOrFail($id);
+            // Delete the image from storage if needed
+            // Storage::delete('chapters/' . $chapter->chapter_image);
+            $chapter->delete();
+
+            UserLog::create([
+                'user_id' => Auth::user()->id,
+                'action' => 'Deleted Chapter ' . $chapter->chapter_name
+            ]);
+
+            DB::commit();
+        } catch (\Exception $e) {
+            Log::info($e);
+            DB::rollback();
+            return redirect()->back()->with('flash_error', 'Failed to delete chapter: ' . $e->getMessage());
+        }
+        return redirect()->back()->with('flash_success', 'Chapter deleted successfully!');
+
     }
 }
