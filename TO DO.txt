@@ -1,0 +1,3 @@
+Type to terminal: 
+
+php artisan migrate
