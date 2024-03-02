@@ -112,7 +112,8 @@ class PublishController extends Controller
      */
     public function edit($id)
     {
-        return view('admin.publish.edit');
+        $chapter = Chapters::findOrFail($id);
+        return view('admin.publish.edit', compact('chapter'));
     }
 
     /**
@@ -124,7 +125,51 @@ class PublishController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $validated = $request->validate([
+            'chapter_name' => 'required|string|min:2|max:255',
+            'chapter_image' => 'nullable|image|mimes:jpeg,jpg,bmp,png',
+        ],[
+            'chapter_name.required' => 'Chapter name is required',
+            'chapter_name.string' => 'Chapter name should be a string',
+            'chapter_name.min' => 'Chapter name must have 2 characters or more',
+            'chapter_name.max' => 'Chapter name must have less 255 characters',
+            'chapter_image.image' => 'Chapter image must be a image',
+            'chapter_image.mimes' => 'Chapter image must be jpeg, jpg, bmp, or png',
+        ]);
+
+        try {
+            DB::beginTransaction();
+            
+            $chapter = Chapters::findOrFail($id);
+            $chapter->chapter_name = $validated['chapter_name'];
+
+            if ($request->hasFile('chapter_image')) {
+                $destinationPath = 'chapters';
+                $photoExtension = $validated['chapter_image']->getClientOriginalExtension();
+                $file = 'image'.uniqid().'.'.$photoExtension;
+                $validated['chapter_image']->move($destinationPath, $file);
+
+                // Delete old image if needed
+                // Storage::delete('chapters/' . $chapter->chapter_image);
+
+                $chapter->chapter_image = $file;
+            }
+
+            $chapter->save();
+
+            UserLog::create([
+                'user_id' => Auth::user()->id,
+                'action' => 'Updated Chapter ' . $validated['chapter_name']
+            ]);
+
+            DB::commit();
+        } catch (\Exception $e) {
+            Log::error($e);
+            DB::rollback();
+            return redirect()->back()->with('flash_error', 'Something went wrong, please try again later.')->withInput();
+        }
+
+        return redirect()->back()->with('flash_success', 'Chapter updated successfully!');
     }
 
     /**

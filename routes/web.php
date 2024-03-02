@@ -40,6 +40,9 @@ Route::middleware(['auth'])->group(function () {
 
     // Publish Section
 
+    Route::put('/publish/{id}', [PublishController::class, 'update'])->name('publish.update');
+
+
     Route::get('/publish', [PublishController::class, 'index'])->name('publish.index');
     Route::post('/publish/store', [PublishController::class, 'store'])->name('publish.store');
 

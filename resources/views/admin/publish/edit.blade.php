@@ -6,7 +6,7 @@
     {{-- Top Cancel --}}
     <div class="row">
         <div class="col-lg-7">
-            <h1><i class="d-flex"></i>Edit Chapters</h1>
+            <h1><i class="d-flex"></i>Update Chapters</h1>
         </div>
         <div class="col-lg-5">
             <div class="container-fluid">
@@ -18,21 +18,29 @@
 
     <hr>
 
-    <div class="col-6 mx-auto vh-50">
-        <div class="mb-3 " >
-            <label for="profile_image" class="form-label">Chapter</label>
-            <input type="file" class="form-control" id="profile_image" name="profile_image" value="{{ old('profile_image') }}">
-            <span class="text-danger w-100"></span>
-        </div>
-        <div class="mb-3">
-            {{-- <label for="first_name" class="form-label">Chapter Name</label> --}}
-            <input type="text" placeholder="Chapter Name" class="form-control" id="first_name" name="first_name" value="{{ old('first_name') }}">
-            <span class="text-danger w-100"></span>
-        </div>
-        <div class="text-center btn-block">
-            <a href="" class="btn btn-dark" type="submit">Upcate Changes</a>
-        </div>
+    <form method="POST" action="{{ route('publish.update', $chapter->id) }}" enctype="multipart/form-data">
+    @csrf
+    @method('PUT')
+
+    <div class="mb-3">
+        <label for="chapter_name" class="form-label">Chapter Name</label>
+        <input type="text" class="form-control" id="chapter_name" name="chapter_name" value="{{ old('chapter_name', $chapter->chapter_name) }}">
+        @error('chapter_name')
+            <span class="text-danger">{{ $message }}</span>
+        @enderror
     </div>
+    
+    <div class="mb-3">
+        <label for="chapter_image" class="form-label">Chapter Image</label>
+        <input type="file" class="form-control" id="chapter_image" name="chapter_image">
+        @error('chapter_image')
+            <span class="text-danger">{{ $message }}</span>
+        @enderror
+    </div>
+
+    <button type="submit" class="btn btn-primary">Update Chapter</button>
+</form>
+
 
 </div>
 

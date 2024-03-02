@@ -32,30 +32,32 @@
         <table class="table rounded">
             <thead>
                 <tr class="table-dark">
+                    <th></th>
                     <th scope="col">#</th>
                     <th scope="col">Chapter</th>
                     <th scope="col">Date Posted</th>
                     <th scope="col"></th>
                     <th scope="col">Actions</th>
-
-
+                    <th></th>
                 </tr>
                 </thead>
                 <tbody>
                     @foreach ( $chapters as $c )
                 <tr>
+                    <th></th>
                     <th scope="row">{{ $c->id }}</th>
                     <td>{{ $c->chapter_name }}</td>
                     <td>{{ $c->created_at }}</td>
                     {{-- <td><button class="btn btn-light" type="button" data-bs-toggle="modal" data-bs-target="#exampleModal1">Read</button></td> --}}
 
-                    <td><a class="btn btn-dark" href="{{ route('publish.view', [$c->id]) }}">view</button></td>
+                    <td>
                         <td>
                             <form action="{{ route('publish.destroy', $c->id) }}" method="POST" onsubmit="return confirmDelete();">
                                 @csrf
                                 @method('DELETE')
                                 <button type="submit" class="btn btn-sm btn-light"><i class="bi bi-trash"></i></button>
                                 <a href="{{ route('publish.edit', $c->id) }}" class="btn btn-sm btn-light"><i class="bi bi-pencil-square"></i></a>
+                                <a class="btn btn-light" href="{{ route('publish.view', [$c->id]) }}"><i class="bi bi-eye"></i>
                             </form>
                         </td>
                     <td>
