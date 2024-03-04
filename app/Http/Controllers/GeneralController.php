@@ -19,7 +19,7 @@ class GeneralController extends Controller
 
     public function index()
     {
-        $userLogs = UserLog::with('user')->orderByDesc('created_at')->get();
+        $userLogs = UserLog::with('user')->orderByDesc('created_at')->paginate(20);
 
         return view('admin.dashboard', compact('userLogs'));
     }

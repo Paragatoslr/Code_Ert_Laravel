@@ -37,19 +37,21 @@
         <tbody>
 
         @foreach ($userLogs as $log)
-        @php $exists = \App\Models\User::find($log->user_id); @endphp
-            @if($exists != null)
             <tr>
-                <td>{{ $log->user->id }}</td>
-                <td>{{ $log->user->name }}</td>
+                <td>{{ $log->user->id ?? 'N/A' }}</td>
+                <td>{{ $log->user->name ?? 'Deleted User' }}</td>
                 <td>{{ $log->action }}</td>
                 <td>{{ $log->created_at->format('Y-m-d H:i:s') }}</td>
             </tr>
-            @endif
         @endforeach
 
         </tbody>
     </table>
+    <div class="row">
+        <div class="container">
+        {{ $userLogs->links() }}
+        </div>
+    </div>
 </div>
 
 @endsection

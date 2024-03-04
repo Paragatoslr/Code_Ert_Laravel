@@ -89,7 +89,7 @@ class UserController extends Controller
 				->withInput();
         }
 
-        return redirect()->back()->with('flash_success', 'Profile updated successfully!');
+        return redirect()->route('users.index')->with('flash_success', 'Profile added successfully!');
     }
 
     /**

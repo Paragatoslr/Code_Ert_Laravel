@@ -139,7 +139,7 @@ class PublishController extends Controller
 
         try {
             DB::beginTransaction();
-            
+
             $chapter = Chapters::findOrFail($id);
             $chapter->chapter_name = $validated['chapter_name'];
 
@@ -169,7 +169,7 @@ class PublishController extends Controller
             return redirect()->back()->with('flash_error', 'Something went wrong, please try again later.')->withInput();
         }
 
-        return redirect()->back()->with('flash_success', 'Chapter updated successfully!');
+        return redirect()->route('publish.index')->with('flash_success', 'Chapter updated successfully!');
     }
 
     /**
