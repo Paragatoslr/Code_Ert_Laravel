@@ -11,12 +11,13 @@
                     @if(session('status'))
                         <div class="alert alert-success">{{ session('status') }}</div>
                     @endif
-                    <form method="POST" action="{{ route('forgot.send') }}">
+                    <form method="POST" action="{{ route('password.email') }}">
                         @csrf
 
                         <div class="mb-3">
                             <label for="email" class="form-label">Email Address</label>
                             <input type="email" id="email" name="email" class="form-control" required>
+                            <span class="text-danger">{{ $errors->first('email') }}</span>
                         </div>
 
                         <div class="d-grid">

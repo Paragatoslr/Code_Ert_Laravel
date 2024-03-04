@@ -35,11 +35,14 @@
                 <input type="text" class="form-control" id="email" name="email" value="{{ old('email') }}">
                 <span class="text-danger w-100">{{ $errors->first('email') }}</span>
             </div>
-        {{-- </div>
 
-        <div class="col-6"> --}}
-
-
+            <div class="mb-3">
+                <label for="role" class="form-label">Role</label>
+                <select class="form-select" id="role" name="role">
+                    <option value="admin">Admin</option>
+                    <option value="user" selected>User</option>
+                </select>
+            </div>
 
             <div class="mb-3">
                 <label for="password" class="form-label">Password</label>

@@ -37,7 +37,7 @@
                 </form>
 
                 <div class="text py-3">
-                    <a href="">Forgot Password?</a>
+                    <a href="{{ route('password.request') }}">Forgot Password?</a>
                 </div>
 
 

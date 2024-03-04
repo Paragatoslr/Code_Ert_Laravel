@@ -52,35 +52,23 @@
                     {{-- <i class="bi bi-list text-light"></i> --}}  {{-- Burger Button Top --}}
 
                 </a>
-                <div class="dropdown-center d-flex py-3">
-                    <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle pe-5" data-bs-toggle="dropdown" aria-expanded="false">
-                        {{-- <img src="{{ auth()->user()->profile_image != null || auth()->user()->profile_image != '' ? '/uploads/users/' . auth()->user()->profile_image : '/assets/user_image.jpg' }}" alt="" width="35" height="35" class="rounded-circle me-2"> --}}
+
+                <div class="dropdown-center d-flex">
+                    <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle pe-3" data-bs-toggle="dropdown" aria-expanded="false">
+
                         <div class="container-fluid hide-mobile">
                             <div class="row">
-                                <strong class="me-2">{{ auth()->user()->first_name . " " . auth()->user()->last_name}}</strong>
+                                <strong class="me-2">{{ auth()->user()->name }}</strong>
                             </div>
                             <div class="row">
-                                <small>{{ Str::ucfirst(auth()->user()->website_role) }}</small>
+                                <small>{{ Str::ucfirst(auth()->user()->role) }}</small>
                             </div>
                         </div>
                     </a>
-                {{-- <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle pe-3" data-bs-toggle="dropdown" aria-expanded="false">
-                    <img src="" alt="" width="35" height="35" class="rounded-circle me-2">
-                    <div class="container-fluid hide-mobile">
-                        <div class="row">
-                            <strong class="me-2">juan tamod</strong>
-                        </div>
-                        <div class="row">
-                            <small>Admin</small>
-                        </div>
+                    <ul class="dropdown-menu dropdown-menu-dark text-small shadow">
+                        <li><a class="dropdown-item" href="{{ route('logout') }}">Sign out</a></li>
+                    </ul>
                     </div>
-                </a> --}}
-                <ul class="dropdown-menu dropdown-menu-dark text-small shadow">
-                    {{-- <li><a class="dropdown-item" href="">My Profile</a></li> --}}
-                    <li><hr class="dropdown-divider"></li>
-                    <li><a class="dropdown-item" href="{{ route('logout') }}">Sign out</a></li>
-                </ul>
-                </div>
             </div>
             </nav>
     </div>
@@ -116,11 +104,13 @@
                             </a>
                         </li>
 
+                        @if(auth()->user()->role == 'admin')
                         <li>
                             <a href="{{ route ('users.index') }}" class="nav-link text-lg-start text-center text-white {{ request()->is('users*') ?'active' : 'text-white' }}">
                                 <i class="bi bi-people me-1"></i> <span class="hide-mobile">Users</span>
                             </a>
                         </li>
+                        @endif
 
                     </ul>
 

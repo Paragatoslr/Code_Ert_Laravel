@@ -8,6 +8,7 @@ use App\Http\Controllers\GeneralController;
 
 
 
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -29,6 +30,24 @@ Route::get('/character', function () {
 Route::get('/login', [AuthController::class, 'login'])->name('login');
 Route::post('/login', [AuthController::class, 'authenticate'])->name('authenticate');
 Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
+
+Route::get('/forgot-password', [AuthController::class, 'forgot'])->middleware('guest')->name('password.request');
+Route::post('/forgot-password', [AuthController::class, 'sendEmail'])->middleware('guest')->name('password.email');
+Route::get('/reset-password/{token}', [AuthController::class, 'reset'])->middleware('guest')->name('password.reset');
+Route::post('/reset-password', [AuthController::class, 'resetPass'])->middleware('guest')->name('password.update');
+
+
+    // For admin-only routes
+    Route::middleware(['auth', 'role:admin'])->group(function () {
+        // Admin routes here
+    });
+
+
+
+// For user-only routes
+Route::middleware(['auth', 'role:user'])->group(function () {
+    // User routes here
+});
 
 
 // Sa middleware lahat ng naka route dito need naka login kaya pag hindi mo ma call ung page ilabas mo lang sa middle ware
@@ -66,9 +85,8 @@ Route::middleware(['auth'])->group(function () {
 
 
 
-    Route::get('/users/edit', function() {
-        return view('admin.users.edit');
-    })->name('users.edit');
+    Route::get('/users/edit/{id}', [UserController::class, 'edit'])->name('users.edit');
+    Route::put('/users/update/{id}', [UserController::class, 'update'])->name('users.update');
 
     //Forgot Password
 

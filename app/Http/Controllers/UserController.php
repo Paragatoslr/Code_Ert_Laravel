@@ -49,6 +49,7 @@ class UserController extends Controller
         $validated = $request->validate([
             'name' => 'required|string|max:100',
             'email' => 'required|email',
+            'role' => 'required',
             'password' => 'required|confirmed'
         ],[
             'name.required' => 'Fullname is required',
@@ -56,6 +57,7 @@ class UserController extends Controller
             'name.max' => 'Fullname max 100 letters',
             'email.required' => 'Email is required',
             'email.email' => 'Email is not valid',
+            'role.required' => 'Role is required',
             'password.required' => 'Password is required',
             'password.confirmed' => 'Password does not match'
         ]);
@@ -67,6 +69,7 @@ class UserController extends Controller
             User::create([
                 'name' => $validated['name'],
                 'email' => $validated['email'],
+                'role' => $validated['role'], // Save selected role
                 'password' => Hash::make($validated['password'])
             ]);
 
@@ -109,7 +112,8 @@ class UserController extends Controller
      */
     public function edit($id)
     {
-        //
+        $user = User::findOrFail($id);
+        return view('admin.users.edit', compact('user'));
     }
 
     /**
@@ -121,7 +125,53 @@ class UserController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $validated = $request->validate([
+            'name' => 'required|string|max:100',
+            'email' => 'required|email',
+            'role' => 'required',
+            'password' => 'nullable|confirmed' // Allow password to be nullable
+        ],[
+            'name.required' => 'Fullname is required',
+            'name.string' => 'Fullname must be string',
+            'name.max' => 'Fullname max 100 letters',
+            'email.required' => 'Email is required',
+            'email.email' => 'Email is not valid',
+            'role.required' => 'Role is required',
+            'password.confirmed' => 'Password does not match'
+        ]);
+
+        try {
+            DB::beginTransaction();
+
+            $user = User::findOrFail($id);
+            $user->name = $validated['name'];
+            $user->email = $validated['email'];
+            $user->role = $validated['role'];
+
+            // Update password if provided
+            if (!empty($validated['password'])) {
+                $user->password = Hash::make($validated['password']);
+            }
+
+            $user->save();
+
+            UserLog::create([
+                'user_id' => Auth::user()->id,
+                'action' => 'Updated User ' . $validated['name']
+            ]);
+
+            DB::commit();
+        } catch (\Exception $e) {
+            Log::error($e);
+            DB::rollback();
+
+            return redirect()
+                ->back()
+                ->with('flash_error', 'Something went wrong, please try again later.')
+                ->withInput();
+        }
+
+        return redirect()->route('users.index')->with('flash_success', 'User information updated successfully!');
     }
 
     /**
